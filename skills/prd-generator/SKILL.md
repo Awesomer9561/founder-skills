@@ -102,13 +102,17 @@ Use snake_case for the filename, e.g., `churn_prevention_tool_PRD.md`
 **Step 6c: Convert to PDF**
 Run:
 ```bash
-npx md-to-pdf "./founder_outputs/prd-generator/[Project Name]/[project_name]_PRD.md"
+npx --yes md-to-pdf@5.2.5 "./founder_outputs/prd-generator/[Project Name]/[project_name]_PRD.md" < /dev/null
 ```
-This creates `[project_name]_PRD.pdf` in the same folder.
+This creates `[project_name]_PRD.pdf` in the same folder. The front matter header is left out of the PDF.
+
+Keep `< /dev/null`: without it, md-to-pdf waits for input on stdin and never finishes. The first conversion on a machine downloads a headless Chromium (about 500 MB) and can take several minutes; tell the user before running it.
+
+If the conversion fails (for example offline, or the Chromium download is blocked), don't retry repeatedly. Keep the markdown, show the user the error in one line, and tell them the markdown file is the complete PRD.
 
 ### 7. Confirm Output
 Tell the user:
-- Where the PDF is saved (full path)
+- Where the PDF is saved (full path), or that PDF conversion failed and why
 - Where the markdown source is saved
 - Brief summary of what's in the PRD
 
@@ -242,7 +246,7 @@ TaskFlow is a task management tool for remote engineering teams...
 
 ### Output Check
 - [ ] Markdown file saved to `./founder_outputs/prd-generator/[Project Name]/` with the Saving Output header
-- [ ] PDF generated via `npx md-to-pdf` (standalone only; skipped in orchestrated mode)
+- [ ] PDF generated via `npx --yes md-to-pdf@5.2.5` (standalone only; skipped in orchestrated mode)
 - [ ] User informed of file locations
 
 **If ANY check fails → fix before completing.**

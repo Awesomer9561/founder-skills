@@ -239,6 +239,8 @@ This guide lives in `.claude/CLAUDE.md`, not the repo root: a root `CLAUDE.md` m
 
 Bump `version` in `package.json`, `.claude-plugin/plugin.json` and both places in `.claude-plugin/marketplace.json` together. Installed plugins only update when the version changes.
 
+PDF conversion uses a pinned `npx --yes md-to-pdf@5.2.5` in `skills/prd-generator/SKILL.md` and `skills/founder/SKILL.md`. Change both together, and only to a release that has been out for a few weeks. `--yes` stops npx from waiting for an install prompt, and `< /dev/null` stops md-to-pdf from waiting for Markdown on stdin. Both would otherwise hang a Claude session.
+
 The SessionStart hook must stay silent in projects without `FOUNDER_CONTEXT.md` or `founder_outputs/runs/`, must never exit non-zero, and must stay dependency-free.
 
 ## Shared Conventions
