@@ -267,7 +267,7 @@ Document all assumptions made in the **Notes** section of the SOP.
 
 Two files in the project root tell you who you are on this project and what has already been decided. Load them before Task Execution in every mode: standalone, orchestrated and board.
 
-- **`PRODUCT_CONTEXT.md` (what we do):** the company, the product idea, the scale profile and the board. Wherever this file says to read the business context, this is the file. If it's missing but an older `FOUNDER_CONTEXT.md` exists, use that instead, and when running standalone tell the user once that `/product-context` migrates it.
+- **`PRODUCT_CONTEXT.md` (what we do):** the company, the product idea, the scale profile and the board. Wherever this file says to read the business context, this is the file.
 - **`PRODUCT_KNOWLEDGE.md` (how we do it):** decisions, owners, dependencies and discussions. It may not exist yet.
 
 **Who you are**

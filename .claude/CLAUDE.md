@@ -13,7 +13,7 @@ founder-skills/              # repo name; the plugin is called founder-suite
 │   └── founder-step.md     # Runs one /founder step or one board-meeting seat
 ├── hooks/
 │   ├── hooks.json          # SessionStart hook registration
-│   └── session-start.js    # Reminds about blank/old context files and unfinished runs
+│   └── session-start.js    # Reminds about a blank PRODUCT_CONTEXT.md / unfinished runs
 ├── bin/
 │   └── cli.js              # Installer (run via npx github:<owner>/founder-skills)
 ├── scripts/
@@ -261,7 +261,7 @@ Bump `version` in `package.json`, `.claude-plugin/plugin.json` and both places i
 
 PDF conversion uses a pinned `npx --yes md-to-pdf@5.2.5` in `skills/prd-generator/SKILL.md` and `skills/founder/SKILL.md`. Change both together, and only to a release that has been out for a few weeks. `--yes` stops npx from waiting for an install prompt, and `< /dev/null` stops md-to-pdf from waiting for Markdown on stdin. Both would otherwise hang a Claude session.
 
-The SessionStart hook must stay silent in projects without `PRODUCT_CONTEXT.md`, `FOUNDER_CONTEXT.md` or `founder_outputs/runs/`, must never exit non-zero, and must stay dependency-free.
+The SessionStart hook must stay silent in projects without `PRODUCT_CONTEXT.md` or `founder_outputs/runs/`, must never exit non-zero, and must stay dependency-free.
 
 ## Shared Conventions
 
@@ -293,7 +293,7 @@ Board meetings use Claude Code agent teams when the user has them enabled (`CLAU
 
 It finds the other skills as siblings of its own folder (`<base dir>/../<skill>/SKILL.md`), which holds for `~/.claude/skills/`, project `.claude/skills/` and plugin installs.
 
-`skills/product-context/references/product_context_template.md` is a copy of the root `PRODUCT_CONTEXT.md`, kept in sync by the sync script. `PRODUCT_CONTEXT.md` was called `FOUNDER_CONTEXT.md` before v3 (and `product-context` was `founder-context`). Skills, the hook and the CLI still recognise the old file and point users to `/product-context migrate`.
+`skills/product-context/references/product_context_template.md` is a copy of the root `PRODUCT_CONTEXT.md`, kept in sync by the sync script. Likewise `skills/lead-magnet-generator/references/hook-patterns.md` and `trigger_words.md` are copies of `viral-hook-creator`'s; edit the originals and re-run the script.
 
 ## Code Style
 
@@ -305,7 +305,7 @@ It finds the other skills as siblings of its own folder (`<base dir>/../<skill>/
 ## CLI Development
 
 The CLI (`bin/cli.js`) handles:
-- `install` - Copies skills to `~/.claude/skills/` + PRODUCT_CONTEXT.md to project root (leaves an existing FOUNDER_CONTEXT.md alone and suggests migrating)
+- `install` - Copies skills to `~/.claude/skills/` + PRODUCT_CONTEXT.md to project root
 - `list` - Shows available skills
 - `--skill` flag - Selective installation (warns if `founder` is installed without the skills it runs)
 - `--no-context` flag - Skip PRODUCT_CONTEXT.md creation

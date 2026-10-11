@@ -22,7 +22,7 @@ Install all skills. `/founder` needs the other skills installed alongside it to 
 The plugin also ships two things the other install methods can't:
 
 - **`founder-step` agent:** a dedicated subagent `/founder` uses to run playbook steps and board seats in parallel. It can't ask questions, publish or post, and only writes its own output file.
-- **Session reminder:** in projects that use founder-suite, Claude is told when `PRODUCT_CONTEXT.md` is still the blank template, has no scale profile, is still the older `FOUNDER_CONTEXT.md`, or a `/founder` run is unfinished. In other projects it stays silent.
+- **Session reminder:** in projects that use founder-suite, Claude is told when `PRODUCT_CONTEXT.md` is still the blank template, has no scale profile, or a `/founder` run is unfinished. In other projects it stays silent.
 
 Plugin skills are namespaced, so commands become `/founder-suite:founder`, `/founder-suite:x-writer`, and so on. The examples below use the short names you get from the other install methods.
 
@@ -160,7 +160,7 @@ The table adapts to your scale profile:
 | Skill | Seat | Description |
 |-------|------|-------------|
 | `founder` | Chair | Orchestrator: turns a goal into a playbook of skills, asks questions once, runs them in order or in parallel, chairs board meetings, and saves a summary |
-| `product-context` | — | Sets up `PRODUCT_CONTEXT.md` (company, product idea, scale profile, board) from your website or a few questions; migrates an older `FOUNDER_CONTEXT.md`; changes the profile |
+| `product-context` | — | Sets up `PRODUCT_CONTEXT.md` (company, product idea, scale profile, board) from your website or a few questions; changes the profile |
 | `strategic-planning` | CEO | Analyzes your business to deliver 3 specific, high-impact next moves for growth (marketing/sales) — asks diagnostic questions when needed to uncover bottlenecks and opportunities |
 | `pricing-strategist` | CFO | Builds comprehensive pricing strategies with tiered plans, price justifications, and revenue optimization through interactive Q&A |
 | `prd-generator` | CPO | Generates professional PRD documents optimized for AI coding tools — asks clarifying questions and outputs a PDF to `./founder_outputs/prd-generator/` |
@@ -213,7 +213,6 @@ The fastest way to create the context:
 
 It reads your homepage, pricing and about pages, and asks your scale profile and whatever your site doesn't say (goals, stage, words to avoid). Then it writes the file and seats your board. Run it again any time to refresh it; it never overwrites your edits without asking. You can also copy [PRODUCT_CONTEXT.md](PRODUCT_CONTEXT.md) from this repository and fill it in by hand.
 
-**Upgrading from v2:** `FOUNDER_CONTEXT.md` is now `PRODUCT_CONTEXT.md`, and `/founder-context` is now `/product-context`. Skills still read an old `FOUNDER_CONTEXT.md`. Run `/product-context migrate` to move it over and add your profile and board.
 
 ## Outputs
 

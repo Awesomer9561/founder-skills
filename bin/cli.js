@@ -9,8 +9,6 @@ const SKILLS_DIR = path.join(__dirname, '..', 'skills');
 const PRODUCT_CONTEXT = path.join(__dirname, '..', 'PRODUCT_CONTEXT.md');
 const TARGET_DIR = path.join(os.homedir(), '.claude', 'skills');
 const TARGET_CONTEXT = path.join(process.cwd(), 'PRODUCT_CONTEXT.md'); // Project root
-const LEGACY_CONTEXT = path.join(process.cwd(), 'FOUNDER_CONTEXT.md'); // Name used before v3
-const LEGACY_SKILL = 'founder-context'; // Renamed to product-context in v3
 
 // The package isn't published to npm (and the npm name "founder-skills" belongs to an unrelated package), so always run from GitHub
 const RUN_COMMAND = (() => {
@@ -203,18 +201,11 @@ async function installSkills(selectedSkills, noContext = false, force = false) {
     }
   });
 
-  if (fs.existsSync(path.join(TARGET_DIR, LEGACY_SKILL))) {
-    console.log(`\nℹ️  ~/.claude/skills/${LEGACY_SKILL} is from an older version; it was renamed to product-context. You can delete it.`);
-  }
-
   // Copy PRODUCT_CONTEXT.md to project root if not skipped
   if (!noContext) {
     console.log('\nProduct Context (project root):');
     if (fs.existsSync(TARGET_CONTEXT)) {
       console.log(`  📄 ./PRODUCT_CONTEXT.md already exists (not overwritten)`);
-    } else if (fs.existsSync(LEGACY_CONTEXT)) {
-      console.log(`  📄 Found ./FOUNDER_CONTEXT.md from an older version (not touched).`);
-      console.log(`     Run /product-context migrate to move it to PRODUCT_CONTEXT.md and seat your board.`);
     } else {
       try {
         fs.copyFileSync(PRODUCT_CONTEXT, TARGET_CONTEXT);

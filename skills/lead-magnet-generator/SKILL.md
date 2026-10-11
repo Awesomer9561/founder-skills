@@ -55,14 +55,14 @@ Before doing ANYTHING else, you MUST use the Read tool to read ALL reference fil
 
 ```
 Read: ./references/lead-magnet-patterns.md
-Read: ../viral-hook-creator/references/hook-patterns.md
-Read: ../viral-hook-creator/references/trigger_words.md
+Read: ./references/hook-patterns.md
+Read: ./references/trigger_words.md
 ```
 
 **What you will find:**
 - **lead-magnet-patterns.md**: Lead magnet post structures, value framing techniques, and CTA patterns
-- **hook-patterns.md**: 18 proven viral hook patterns with templates and psychology (from viral-hook-creator)
-- **trigger_words.md**: Four categories of viral trigger words (from viral-hook-creator)
+- **hook-patterns.md**: 18 proven viral hook patterns with templates and psychology (shared with viral-hook-creator)
+- **trigger_words.md**: Four categories of viral trigger words (shared with viral-hook-creator)
 
 **DO NOT PROCEED** to Step 2 until you have read ALL three files and have the patterns loaded in context.
 
@@ -183,7 +183,7 @@ Hard constraints. No interpretation.
     ```
 
 ### Opening Hook Rules
-- Opening hooks MUST use patterns from viral-hook-creator's hook-patterns.md
+- Opening hooks MUST use patterns from ./references/hook-patterns.md
 - Integrate 1-2 trigger words from trigger_words.md
 - Each hook should create curiosity and establish credibility in 1-2 lines
 - Common patterns that work well for lead magnets: Authority Credibility, Data-Driven Insight, Time Investment
@@ -337,8 +337,8 @@ P.S. Repost for priority in the queue
 | File | Purpose |
 |------|---------|
 | `./references/lead-magnet-patterns.md` | Value anchors, CTA patterns, post structures, and examples |
-| `../viral-hook-creator/references/hook-patterns.md` | 18 proven viral hook patterns for opening lines |
-| `../viral-hook-creator/references/trigger_words.md` | Viral trigger words to integrate into hooks |
+| `./references/hook-patterns.md` | 18 proven viral hook patterns for opening lines |
+| `./references/trigger_words.md` | Viral trigger words to integrate into hooks |
 
 **Why this matters:** Lead magnet posts need two things: (1) a viral opening hook that stops the scroll, and (2) a clear value-to-action structure. Hook patterns create the initial curiosity. Lead magnet patterns convert that attention into comments.
 
@@ -350,8 +350,8 @@ Before finalizing output, verify ALL of the following:
 
 ### Pre-Execution Check
 - [ ] I read `./references/lead-magnet-patterns.md` before generating posts
-- [ ] I read `../viral-hook-creator/references/hook-patterns.md` before generating hooks
-- [ ] I read `../viral-hook-creator/references/trigger_words.md` before generating hooks
+- [ ] I read `./references/hook-patterns.md` before generating hooks
+- [ ] I read `./references/trigger_words.md` before generating hooks
 - [ ] I have hook patterns, trigger words, value anchors, and CTA formats in context
 
 ### Opening Hook Check
@@ -408,7 +408,7 @@ If the user doesn't provide what's inside the lead magnet, ask for 3-5 key benef
 
 Two files in the project root tell you who you are on this project and what has already been decided. Load them before Task Execution in every mode: standalone, orchestrated and board.
 
-- **`PRODUCT_CONTEXT.md` (what we do):** the company, the product idea, the scale profile and the board. Wherever this file says to read the business context, this is the file. If it's missing but an older `FOUNDER_CONTEXT.md` exists, use that instead, and when running standalone tell the user once that `/product-context` migrates it.
+- **`PRODUCT_CONTEXT.md` (what we do):** the company, the product idea, the scale profile and the board. Wherever this file says to read the business context, this is the file.
 - **`PRODUCT_KNOWLEDGE.md` (how we do it):** decisions, owners, dependencies and discussions. It may not exist yet.
 
 **Who you are**

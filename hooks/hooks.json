@@ -1,5 +1,5 @@
 {
-  "description": "Reminds Claude about an unfilled or older context file, a missing scale profile, or unfinished /founder runs in projects that use founder-suite. Silent everywhere else.",
+  "description": "Reminds Claude about an unfilled PRODUCT_CONTEXT.md, a missing scale profile, or unfinished /founder runs in projects that use founder-suite. Silent everywhere else.",
   "hooks": {
     "SessionStart": [
       {

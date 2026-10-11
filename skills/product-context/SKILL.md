@@ -1,6 +1,6 @@
 ---
 name: product-context
-description: Sets up a project for founder-suite. Creates or updates PRODUCT_CONTEXT.md (what the company and product are, its scale profile and its board of personas) from the company website or a few questions, migrates an older FOUNDER_CONTEXT.md, and changes the scale profile when the business grows. Use when starting a project, when PRODUCT_CONTEXT.md is missing or has placeholders, when the business has changed, or to switch between bootstrapped, startup and corporate.
+description: Sets up a project for founder-suite. Creates or updates PRODUCT_CONTEXT.md (what the company and product are, its scale profile and its board of personas) from the company website or a few questions, and changes the scale profile when the business grows. Use when starting a project, when PRODUCT_CONTEXT.md is missing or has placeholders, when the business has changed, or to switch between bootstrapped, startup and corporate.
 ---
 
 # Product Context
@@ -19,12 +19,11 @@ Go to **Changing the Profile**. The new profile may follow (`profile corporate`)
 
 ### If $ARGUMENTS is empty or not provided:
 Check the project root.
-- **`PRODUCT_CONTEXT.md` doesn't exist, but `FOUNDER_CONTEXT.md` does:** respond with "product-context loaded. I found an older FOUNDER_CONTEXT.md. Say `migrate` and I'll move it to PRODUCT_CONTEXT.md, add your scale profile and seat your board." and wait.
-- **Neither exists, or `PRODUCT_CONTEXT.md` still has placeholders like `[Your company name]`:** respond with "product-context loaded. What's your website URL? (Or say `no website` and I'll ask a few questions instead. Just an idea so far? That works too.)" and wait.
+- **`PRODUCT_CONTEXT.md` doesn't exist, or still has placeholders like `[Your company name]`:** respond with "product-context loaded. What's your website URL? (Or say `no website` and I'll ask a few questions instead. Just an idea so far? That works too.)" and wait.
 - **It exists and is filled in:** respond with "product-context loaded. Your PRODUCT_CONTEXT.md is set up (profile: <profile>, <N> board seats). Send a URL to refresh it, tell me what changed, or say `profile <bootstrapped|startup|corporate>`." and wait.
 
 ### If $ARGUMENTS contains content:
-Proceed immediately to Task Execution. The content may be a URL, `no website`, `migrate`, a description of the idea, a description of what changed, or a mix.
+Proceed immediately to Task Execution. The content may be a URL, `no website`, a description of the idea, a description of what changed, or a mix.
 
 ---
 
@@ -35,9 +34,8 @@ Proceed immediately to Task Execution. The content may be a URL, `no website`, `
 
 Use the Read tool to read `./references/product_context_template.md`. It defines the exact sections and fields of `PRODUCT_CONTEXT.md`. The output must keep this structure so every other skill can find what it needs.
 
-### 2. Read the Existing Files
-- If `PRODUCT_CONTEXT.md` exists in the project root, read it.
-- If it doesn't, but `FOUNDER_CONTEXT.md` does, read that file. This is a **migration**: its sections map one-to-one onto the template; About Your Business, Brand Voice, Business Goals, Products/Services, Competitors and Additional Context keep their fields. Move stage, team size and funding from Additional Context into the new About Your Business fields when they are there.
+### 2. Read the Existing File
+If `PRODUCT_CONTEXT.md` exists in the project root, read it.
 
 For every field, note whether it is:
 - **filled:** real content written by the user
@@ -129,8 +127,6 @@ Write the result to `PRODUCT_CONTEXT.md` in the project root. Then add a final s
 ```
 
 Replace any existing Sources section rather than adding a second one.
-
-**Migration:** once `PRODUCT_CONTEXT.md` is written, ask once whether to delete `FOUNDER_CONTEXT.md`. Recommend deleting it, so skills stop falling back to the old file. Delete it only on yes.
 
 ### 7. Format and Verify
 - Complete the **Quality Checklist** before presenting.
@@ -224,7 +220,7 @@ In chat, show:
 
 ### Pre-Execution Check
 - [ ] I read the template reference file
-- [ ] I read the existing PRODUCT_CONTEXT.md, or FOUNDER_CONTEXT.md when migrating
+- [ ] I read the existing PRODUCT_CONTEXT.md if it exists
 
 ### Content Check
 - [ ] Scale profile is set to bootstrapped, startup or corporate

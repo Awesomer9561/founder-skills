@@ -49,7 +49,7 @@ Use the Read tool to read all of these before doing anything else:
 - `./references/board.md` — how to chair a board meeting (read it whenever the plan has a `board-meeting` or Board review phase)
 
 Then read the project files in the root, if they exist:
-- `PRODUCT_CONTEXT.md` — what we do: company, product idea, scale profile, board (an older `FOUNDER_CONTEXT.md` counts until it's migrated)
+- `PRODUCT_CONTEXT.md` — what we do: company, product idea, scale profile, board
 - `PRODUCT_KNOWLEDGE.md` — how we do it: decisions, owners, dependencies, discussions
 
 ### 2. Locate the Skills
@@ -79,7 +79,6 @@ Every step needs the project's scale profile and board, so this gate is blocking
 - `PRODUCT_CONTEXT.md` doesn't exist
 - its `Scale profile` is unset or still a placeholder
 - its Board & Management table is empty
-- only an older `FOUNDER_CONTEXT.md` exists
 
 then tell the user in one line that the project needs its product context first (about 2 minutes, from their website or a few questions). Then follow `SKILLS_ROOT/product-context/SKILL.md` in standalone mode, re-read `PRODUCT_CONTEXT.md`, and continue. Keep the user's goal; don't ask for it again.
 

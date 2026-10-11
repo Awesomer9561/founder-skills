@@ -25,7 +25,12 @@ const COPIES = [
   {
     from: path.join(ROOT, 'PRODUCT_CONTEXT.md'),
     to: path.join(SKILLS_DIR, 'product-context', 'references', 'product_context_template.md')
-  }
+  },
+  // lead-magnet-generator writes its hooks with viral-hook-creator's patterns
+  ...['hook-patterns.md', 'trigger_words.md'].map(file => ({
+    from: path.join(SKILLS_DIR, 'viral-hook-creator', 'references', file),
+    to: path.join(SKILLS_DIR, 'lead-magnet-generator', 'references', file)
+  }))
 ];
 
 // Every deliverable skill is also a persona (a seat on the project's board).
