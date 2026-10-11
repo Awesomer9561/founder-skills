@@ -1,24 +1,25 @@
 {
-  "name": "founder-skills",
+  "name": "founder-suite",
   "owner": {
-    "name": "Ognjen Gatalo",
-    "url": "https://github.com/ognjengt"
+    "name": "Parvez Ali",
+    "url": "https://github.com/Awesomer9561"
   },
   "metadata": {
-    "description": "Essential skills for founders: SOPs, conversion optimization, viral hooks, lead magnets, social media writing, outreach, and strategic planning — plus a /founder orchestrator that chains them into playbooks",
-    "version": "1.1.0"
+    "description": "A complete founder toolkit for Claude: 17 marketing, copywriting, product and strategy skills plus a /founder orchestrator that chains them into playbooks (launch, content, landing page, outbound, growth)",
+    "version": "2.0.0"
   },
   "plugins": [
     {
-      "name": "founder-skills",
-      "description": "Essential skills for founders: SOPs, conversion optimization, viral hooks, lead magnets, social media writing, outreach, and strategic planning — plus a /founder orchestrator that chains them into playbooks",
+      "name": "founder-suite",
+      "description": "A complete founder toolkit for Claude: 17 marketing, copywriting, product and strategy skills plus a /founder orchestrator that chains them into playbooks (launch, content, landing page, outbound, growth)",
       "source": "./",
-      "strict": false,
-      "version": "1.1.0",
+      "version": "2.0.0",
       "author": {
-        "name": "Ognjen Gatalo"
+        "name": "Parvez Ali",
+        "url": "https://github.com/Awesomer9561"
       },
-      "repository": "https://github.com/ognjengt/founder-skills",
+      "homepage": "https://github.com/Awesomer9561/founder-skills#readme",
+      "repository": "https://github.com/Awesomer9561/founder-skills",
       "license": "MIT",
       "keywords": [
         "founder",
@@ -28,26 +29,9 @@
         "linkedin",
         "sop",
         "strategy",
-        "orchestrator"
-      ],
-      "skills": [
-        "./skills/founder",
-        "./skills/founder-context",
-        "./skills/sop-creator",
-        "./skills/cro-optimization",
-        "./skills/viral-hook-creator",
-        "./skills/lead-magnet-generator",
-        "./skills/strategic-planning",
-        "./skills/go-to-market-plan",
-        "./skills/x-writer",
-        "./skills/linkedin-writer",
-        "./skills/outreach-specialist",
-        "./skills/competitor-intel",
-        "./skills/brand-copywriter",
-        "./skills/pricing-strategist",
-        "./skills/prd-generator",
-        "./skills/product-hunt-launch-plan",
-        "./skills/marketing-ideas"
+        "orchestrator",
+        "go-to-market",
+        "product-hunt"
       ]
     }
   ]

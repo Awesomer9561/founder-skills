@@ -1,16 +1,28 @@
-# Claude Code skills pack for founders, marketers, content creators and business owners.
+# founder-suite
 
-This repository contains 17 Claude skills that will help you turn Claude into a Fortune 500 growth team: 15 specialist skills, plus `/founder`, an orchestrator that chains them into complete workflows, and `/founder-context`, which sets up your business profile from your website.
+A Claude Code plugin for founders, marketers, content creators and business owners.
+
+It contains 17 Claude skills that will help you turn Claude into a Fortune 500 growth team: 15 specialist skills, plus `/founder`, an orchestrator that chains them into complete workflows, and `/founder-context`, which sets up your business profile from your website.
 
 Stop prompting from scratch and use proven marketing, copywriting, and product skills companies pay millions for.
-
-Learn more at: https://saasstrats.com/founder-skills
-
-<img src="./packaging.png" alt="Cover package" width="520">
 
 ## Installation
 
 Install all skills. `/founder` needs the other skills installed alongside it to run its playbooks.
+
+### As a Claude Code plugin (recommended)
+
+```
+/plugin marketplace add Awesomer9561/founder-skills
+/plugin install founder-suite@founder-suite
+```
+
+The plugin also ships two things the other install methods can't:
+
+- **`founder-step` agent:** a dedicated subagent `/founder` uses to run playbook steps in parallel. It can't ask questions, publish or post, and only writes its own output file.
+- **Session reminder:** in projects that use founder-suite, Claude is told when `FOUNDER_CONTEXT.md` is still the blank template or a `/founder` run is unfinished. In other projects it stays silent.
+
+Plugin skills are namespaced, so commands become `/founder-suite:founder`, `/founder-suite:x-writer`, and so on. The examples below use the short names you get from the other install methods.
 
 ### Via Terminal (npx skills)
 
@@ -34,14 +46,7 @@ npx github:Awesomer9561/founder-skills install --skill founder --skill x-writer
 npx github:Awesomer9561/founder-skills list
 ```
 
-> Don't use `npx founder-skills`: that name on npm belongs to an unrelated package.
-
-### As a Claude Code plugin
-
-```
-/plugin marketplace add Awesomer9561/founder-skills
-/plugin install founder-skills@founder-skills
-```
+> Don't use `npx founder-skills` or `npx founder-suite`. This package isn't on npm, and `founder-skills` there belongs to an unrelated package.
 
 ### Manual Installation
 
@@ -189,6 +194,10 @@ skills/
 
 After adding or editing a skill, run `node scripts/sync-shared.js` to add the shared output, context and orchestration sections, and add the skill to the `/founder` skill catalog.
 
+## Credits
+
+founder-suite is built on [founder-skills](https://github.com/ognjengt/founder-skills) by [Ognjen Gatalo](https://github.com/ognjengt), which provides the 15 original skills and their reference libraries. founder-suite adds the `/founder` orchestrator, `/founder-context`, saved outputs, context write-back, and the plugin packaging.
+
 ## License
 
-MIT
+MIT. See [LICENSE](LICENSE).

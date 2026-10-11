@@ -1,6 +1,6 @@
 # Founder Context
 
-This file provides context about your business that all founder-skills will use. Customize it with your specific information.
+This file provides context about your business that every founder-suite skill will use. Customize it with your specific information.
 
 ## About Your Business
 

@@ -1,14 +1,19 @@
 # Development Guidelines
 
-This file provides guidance for Claude when working on the founder-skills repository.
+This file provides guidance for Claude when working on the founder-suite repository (a fork of ognjengt/founder-skills, published as the `founder-suite` Claude Code plugin).
 
 ## Repository Structure
 
 ```
-founder-skills/
+founder-skills/              # repo name; the plugin is called founder-suite
 ├── .claude-plugin/
-│   ├── marketplace.json    # Marketplace metadata + skill list
-│   └── plugin.json         # Plugin metadata
+│   ├── marketplace.json    # Marketplace listing (no component specs)
+│   └── plugin.json         # Plugin manifest; components are auto-discovered
+├── agents/
+│   └── founder-step.md     # Subagent that runs one /founder step
+├── hooks/
+│   ├── hooks.json          # SessionStart hook registration
+│   └── session-start.js    # Reminds about blank FOUNDER_CONTEXT.md / unfinished runs
 ├── bin/
 │   └── cli.js              # Installer (run via npx github:<owner>/founder-skills)
 ├── scripts/
@@ -194,9 +199,7 @@ founder-skills/
 
 4. Register the skill with the orchestrator: add a row to `skills/founder/references/skill-catalog.md` (needs, produces, good_for, notes) and, if it belongs in a workflow, a step in `skills/founder/references/playbooks.md`.
 
-5. Update `marketplace.json` to include the new skill in the skills array.
-
-6. Update `README.md` to list the new skill in the Available Skills table, and update the skill count at the top.
+5. Update `README.md` to list the new skill in the Available Skills table, and update the skill count at the top.
 
 ## Skill Naming Conventions
 
@@ -215,6 +218,21 @@ founder-skills/
    ```
    /new-skill [test input]
    ```
+
+## Plugin
+
+The repo is a single-plugin marketplace. `plugin.json` is the only manifest: skills (`skills/`), agents (`agents/`) and hooks (`hooks/hooks.json`) are auto-discovered, so new skills need no manifest change. Don't add `skills`, `agents`, `hooks` or `strict` to the marketplace entry: declaring components in both places makes the plugin fail to load.
+
+Before releasing:
+```bash
+claude plugin validate .                         # marketplace + plugin
+claude plugin validate --strict skills agents    # components
+```
+`--strict` on the repo root warns that this `CLAUDE.md` isn't shipped as plugin context. That's expected: it's for contributors, not users.
+
+Bump `version` in `package.json`, `.claude-plugin/plugin.json` and both places in `.claude-plugin/marketplace.json` together. Installed plugins only update when the version changes.
+
+The SessionStart hook must stay silent in projects without `FOUNDER_CONTEXT.md` or `founder_outputs/runs/`, must never exit non-zero, and must stay dependency-free.
 
 ## Shared Conventions
 

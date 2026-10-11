@@ -10,7 +10,7 @@ const FOUNDER_CONTEXT = path.join(__dirname, '..', 'FOUNDER_CONTEXT.md');
 const TARGET_DIR = path.join(os.homedir(), '.claude', 'skills');
 const TARGET_CONTEXT = path.join(process.cwd(), 'FOUNDER_CONTEXT.md'); // Project root
 
-// The npm name "founder-skills" belongs to an unrelated package, so always run from GitHub
+// The package isn't published to npm (and the npm name "founder-skills" belongs to an unrelated package), so always run from GitHub
 const RUN_COMMAND = (() => {
   try {
     const pkg = require('../package.json');
@@ -94,7 +94,7 @@ function parseArgs(args) {
 function listSkills() {
   const skills = getAvailableSkills();
 
-  console.log('\n📦 Available founder-skills:\n');
+  console.log('\n📦 Available founder-suite skills:\n');
 
   if (skills.length === 0) {
     console.log('  No skills found.\n');
@@ -179,7 +179,7 @@ async function installSkills(selectedSkills, noContext = false, force = false) {
   const toCopy = await resolveOverwrites(skillsToInstall, force);
   const skipped = skillsToInstall.filter(skill => !toCopy.includes(skill));
 
-  console.log('\n🚀 Installing founder-skills...\n');
+  console.log('\n🚀 Installing founder-suite skills...\n');
 
   // Ensure target directory exists
   fs.mkdirSync(TARGET_DIR, { recursive: true });
@@ -228,7 +228,9 @@ async function installSkills(selectedSkills, noContext = false, force = false) {
 // Show help
 function showHelp() {
   console.log(`
-founder-skills - Claude Code skills for founders
+founder-suite - Claude Code skills for founders, with a /founder orchestrator
+
+Prefer the plugin? In Claude Code: /plugin marketplace add Awesomer9561/founder-skills
 
 Usage:
   ${RUN_COMMAND} <command> [options]

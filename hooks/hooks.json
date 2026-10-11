@@ -1,0 +1,16 @@
+{
+  "description": "Reminds Claude about an unfilled FOUNDER_CONTEXT.md or unfinished /founder runs in projects that use founder-suite. Silent everywhere else.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/session-start.js\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

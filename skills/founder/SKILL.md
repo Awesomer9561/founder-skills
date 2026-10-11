@@ -1,12 +1,12 @@
 ---
 name: founder
-description: Orchestrates the founder-skills into one workflow. Turns a goal ("launch next month", "fix our landing page", "a week of content") into a playbook of skills, asks all questions once, runs the steps in order (in parallel where possible), and saves every output plus a summary to one run folder. Use when the user wants an outcome that spans several skills, asks which skill to use, or wants to resume an unfinished run.
+description: Orchestrates the founder-suite skills into one workflow. Turns a goal ("launch next month", "fix our landing page", "a week of content") into a playbook of skills, asks all questions once, runs the steps in order (in parallel where possible), and saves every output plus a summary to one run folder. Use when the user wants an outcome that spans several skills, asks which skill to use, or wants to resume an unfinished run.
 ---
 
 # Founder (Orchestrator)
 
 ## Purpose
-Turn one founder goal into a connected set of finished deliverables by chaining the other founder-skills.
+Turn one founder goal into a connected set of finished deliverables by chaining the other founder-suite skills.
 
 ---
 
@@ -109,8 +109,8 @@ task: <the step's task from the playbook, filled in with specifics from the brie
 
 Set the step's status to `running` in `plan.md`, then run it:
 
-**If you can launch subagents (the Agent or Task tool is available):** launch one general-purpose subagent per ready step, all in a single message so they run in parallel. Use absolute paths and this prompt:
-> You are running one step of a founder-skills workflow in project directory `<absolute cwd>`. Read `<SKILLS_ROOT>/<skill>/SKILL.md` and follow it in **Orchestrated Mode** with the handoff below. The skill's reference files are in `<SKILLS_ROOT>/<skill>/references/`. You cannot ask the user questions; follow the skill's Orchestrated Mode rules for missing information.
+**If you can launch subagents (the Agent or Task tool is available):** launch one subagent per ready step, all in a single message so they run in parallel. Use the `founder-step` agent type if it's available (it ships with the founder-suite plugin and may be listed as `founder-suite:founder-step`); otherwise use a general-purpose subagent. Use absolute paths and this prompt:
+> You are running one step of a founder-suite workflow in project directory `<absolute cwd>`. Read `<SKILLS_ROOT>/<skill>/SKILL.md` and follow it in **Orchestrated Mode** with the handoff below. The skill's reference files are in `<SKILLS_ROOT>/<skill>/references/`. You cannot ask the user questions; follow the skill's Orchestrated Mode rules for missing information.
 >
 > <handoff block>
 
