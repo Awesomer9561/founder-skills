@@ -55,12 +55,12 @@ Each playbook is a chain of skills grouped into phases. Steps in the same phase 
 ## new-product
 
 **Triggers:** new product, idea, PRD, spec, MVP, build, validate an idea
-**Intake:** the product idea in one or two sentences · primary user · 3 to 5 must-have features · tech stack preference · target launch timeframe
+**Intake:** the product idea in one or two sentences · primary user · 3 to 5 must-have features · tech stack preference · target launch timeframe · whether they want a PDF of the PRD (default: no)
 
 ### Phase 1 · Define
 | # | skill | depends_on | when | task |
 |---|-------|-----------|------|------|
-| 01 | prd-generator | — | — | Write the PRD for <product idea>. Use the intake answers in the brief instead of asking questions. Markdown only, no PDF unless the brief asks. |
+| 01 | prd-generator | — | — | Write the PRD for <product idea>. Use the intake answers in the brief instead of asking questions. Markdown only; the orchestrator makes the PDF afterwards if the brief asks. |
 | 02 | competitor-intel | — | a competitor is named | Analyse <competitor> as the main alternative to <product idea>. |
 
 ### Phase 2 · Monetise & launch

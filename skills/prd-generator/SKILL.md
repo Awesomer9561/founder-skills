@@ -84,7 +84,7 @@ Using the template structure from `./references/prd_template.md`, create a compl
 
 ### 6. Save and Convert to PDF
 
-This step replaces the default path in **Saving Output**. In orchestrated mode, save the markdown to the handoff's `output` path instead and skip the PDF unless the task asks for it.
+This step replaces the default path in **Saving Output**. In orchestrated mode, save the markdown to the handoff's `output` path instead and skip Step 6c: the orchestrator converts the file to PDF afterwards if the user wants one.
 
 **Step 6a: Create output folder**
 ```bash
@@ -242,7 +242,7 @@ TaskFlow is a task management tool for remote engineering teams...
 
 ### Output Check
 - [ ] Markdown file saved to `./founder_outputs/prd-generator/[Project Name]/` with the Saving Output header
-- [ ] PDF generated via `npx md-to-pdf`
+- [ ] PDF generated via `npx md-to-pdf` (standalone only; skipped in orchestrated mode)
 - [ ] User informed of file locations
 
 **If ANY check fails → fix before completing.**

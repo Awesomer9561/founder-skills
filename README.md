@@ -181,7 +181,7 @@ Each file starts with a short header (skill, date, request, assumptions) so you,
 
 ## Contributing
 
-Want to add a new skill? See [CLAUDE.md](CLAUDE.md) for development guidelines.
+Want to add a new skill? See [.claude/CLAUDE.md](.claude/CLAUDE.md) for development guidelines.
 
 ### Skill Structure
 

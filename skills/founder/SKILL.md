@@ -121,6 +121,8 @@ After each step finishes, read the front matter of its output file and update `p
 - **`blocked`** → collect its `## Blocking Questions`, batch them with any others from the same phase, and ask with AskUserQuestion. Append the answers to `brief.md` under "Answers added during the run", then rerun the step.
 - **Missing file or failed run** → retry once. If it fails again, mark it `failed`, tell the user, and ask whether to continue without it. Steps depending on it run with a note in their `task` that the input is missing.
 
+**PDF for `prd-generator`:** steps can't run shell commands, so if the brief asks for a PDF, run `npx md-to-pdf "<step output path>"` yourself once that step is `complete`. If it fails, keep the markdown, note it in `plan.md`, and tell the user. No other step needs a command.
+
 **Checkpoints (phase-by-phase mode):** after each phase, show a digest of 3 to 6 lines per step (key decisions and file path) and ask:
 - **Continue** — start the next phase
 - **Redo a step** — the user gives feedback; add it to that step's `task` and rerun only that step. Then mark completed steps that depend on it `stale` and ask whether to rerun them.

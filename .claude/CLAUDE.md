@@ -30,7 +30,7 @@ founder-skills/              # repo name; the plugin is called founder-suite
 ├── FOUNDER_CONTEXT.md      # Business context template
 ├── package.json            # npm package config
 ├── README.md               # User documentation
-└── CLAUDE.md               # This file
+└── .claude/CLAUDE.md       # This file (contributor guide)
 ```
 
 ## Adding a New Skill
@@ -219,16 +219,23 @@ founder-skills/              # repo name; the plugin is called founder-suite
    /new-skill [test input]
    ```
 
+To test the whole plugin (namespaced skills, the `founder-step` agent and the SessionStart hook) without installing it, load it for one session from a test project:
+```bash
+claude --plugin-dir /path/to/founder-skills
+```
+Then run `/founder-suite:<skill>`.
+
 ## Plugin
 
 The repo is a single-plugin marketplace. `plugin.json` is the only manifest: skills (`skills/`), agents (`agents/`) and hooks (`hooks/hooks.json`) are auto-discovered, so new skills need no manifest change. Don't add `skills`, `agents`, `hooks` or `strict` to the marketplace entry: declaring components in both places makes the plugin fail to load.
 
 Before releasing:
 ```bash
-claude plugin validate .                         # marketplace + plugin
-claude plugin validate --strict skills agents    # components
+claude plugin validate --strict .                          # marketplace
+claude plugin validate --strict .claude-plugin/plugin.json # plugin manifest
+claude plugin validate --strict skills agents              # components
 ```
-`--strict` on the repo root warns that this `CLAUDE.md` isn't shipped as plugin context. That's expected: it's for contributors, not users.
+This guide lives in `.claude/CLAUDE.md`, not the repo root: a root `CLAUDE.md` makes `--strict` fail, because plugins don't ship it as context. Claude Code still loads it from `.claude/` for contributors. `.gitignore` ignores the rest of `.claude/`.
 
 Bump `version` in `package.json`, `.claude-plugin/plugin.json` and both places in `.claude-plugin/marketplace.json` together. Installed plugins only update when the version changes.
 
