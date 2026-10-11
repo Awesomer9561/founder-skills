@@ -1,7 +1,7 @@
 {
   "name": "founder-suite",
-  "version": "2.0.0",
-  "description": "A complete founder toolkit for Claude: 17 marketing, copywriting, product and strategy skills plus a /founder orchestrator that chains them into playbooks (launch, content, landing page, outbound, growth)",
+  "version": "3.0.0",
+  "description": "A complete founder toolkit for Claude: 20 marketing, product, finance and strategy skills that act as your board (CEO, CFO, CTO, CMO, Head of Sales...), plus a /founder orchestrator that chains them into playbooks and chairs board meetings",
   "bin": {
     "founder-suite": "./bin/cli.js"
   },

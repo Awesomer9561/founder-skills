@@ -6,9 +6,11 @@ const os = require('os');
 const readline = require('readline');
 
 const SKILLS_DIR = path.join(__dirname, '..', 'skills');
-const FOUNDER_CONTEXT = path.join(__dirname, '..', 'FOUNDER_CONTEXT.md');
+const PRODUCT_CONTEXT = path.join(__dirname, '..', 'PRODUCT_CONTEXT.md');
 const TARGET_DIR = path.join(os.homedir(), '.claude', 'skills');
-const TARGET_CONTEXT = path.join(process.cwd(), 'FOUNDER_CONTEXT.md'); // Project root
+const TARGET_CONTEXT = path.join(process.cwd(), 'PRODUCT_CONTEXT.md'); // Project root
+const LEGACY_CONTEXT = path.join(process.cwd(), 'FOUNDER_CONTEXT.md'); // Name used before v3
+const LEGACY_SKILL = 'founder-context'; // Renamed to product-context in v3
 
 // The package isn't published to npm (and the npm name "founder-skills" belongs to an unrelated package), so always run from GitHub
 const RUN_COMMAND = (() => {
@@ -201,19 +203,26 @@ async function installSkills(selectedSkills, noContext = false, force = false) {
     }
   });
 
-  // Copy FOUNDER_CONTEXT.md to project root if not skipped
+  if (fs.existsSync(path.join(TARGET_DIR, LEGACY_SKILL))) {
+    console.log(`\nℹ️  ~/.claude/skills/${LEGACY_SKILL} is from an older version; it was renamed to product-context. You can delete it.`);
+  }
+
+  // Copy PRODUCT_CONTEXT.md to project root if not skipped
   if (!noContext) {
-    console.log('\nFounder Context (project root):');
-    if (!fs.existsSync(TARGET_CONTEXT)) {
-      try {
-        fs.copyFileSync(FOUNDER_CONTEXT, TARGET_CONTEXT);
-        console.log(`  ✅ Created ./FOUNDER_CONTEXT.md`);
-        console.log(`     Run /founder-context to fill it in, or edit it by hand.`);
-      } catch (err) {
-        console.log(`  ⚠️  Could not copy FOUNDER_CONTEXT.md - ${err.message}`);
-      }
+    console.log('\nProduct Context (project root):');
+    if (fs.existsSync(TARGET_CONTEXT)) {
+      console.log(`  📄 ./PRODUCT_CONTEXT.md already exists (not overwritten)`);
+    } else if (fs.existsSync(LEGACY_CONTEXT)) {
+      console.log(`  📄 Found ./FOUNDER_CONTEXT.md from an older version (not touched).`);
+      console.log(`     Run /product-context migrate to move it to PRODUCT_CONTEXT.md and seat your board.`);
     } else {
-      console.log(`  📄 ./FOUNDER_CONTEXT.md already exists (not overwritten)`);
+      try {
+        fs.copyFileSync(PRODUCT_CONTEXT, TARGET_CONTEXT);
+        console.log(`  ✅ Created ./PRODUCT_CONTEXT.md`);
+        console.log(`     Run /product-context to fill it in (scale profile, product idea, board), or edit it by hand.`);
+      } catch (err) {
+        console.log(`  ⚠️  Could not copy PRODUCT_CONTEXT.md - ${err.message}`);
+      }
     }
   }
 
@@ -236,13 +245,13 @@ Usage:
   ${RUN_COMMAND} <command> [options]
 
 Commands:
-  install              Install skills + FOUNDER_CONTEXT.md template
+  install              Install skills + PRODUCT_CONTEXT.md template
   list                 List available skills
 
 Options:
   --skill, -s <name>   Install specific skill(s)
                        Can be used multiple times
-  --no-context         Skip creating FOUNDER_CONTEXT.md
+  --no-context         Skip creating PRODUCT_CONTEXT.md
   --force, -f          Overwrite skills that are already installed
 
 Examples:
@@ -254,8 +263,8 @@ Examples:
   ${RUN_COMMAND} list
 
 Skills are installed globally to ~/.claude/skills/
-FOUNDER_CONTEXT.md is created in your current directory (project root)
-Run /founder-context in Claude Code to fill it in from your website
+PRODUCT_CONTEXT.md is created in your current directory (project root)
+Run /product-context in Claude Code to fill it in from your website or a few questions
 `);
 }
 

@@ -8,8 +8,13 @@ Each playbook is a chain of skills grouped into phases. Steps in the same phase 
 - `when` — condition for optional steps; drop the step if it isn't met
 - `repeat` — run once per item (output files get a suffix, e.g. `01a-competitor-intel.md`, `01b-...`)
 - `task` — what to put in the handoff's `task` line; fill `<...>` from the brief
+- `mode` — `board` makes the step a board-meeting seat: the handoff adds `mode: board`, `item`, `round` and `peers`, and the skill writes a position memo instead of its deliverable (see the skills' Board Mode)
+- `(chair)` in the skill column — the orchestrator runs the step itself, with no subagent (see `board.md`)
+- `checkpoint: always` on a phase — stop for a checkpoint after it, even in "run everything" mode
 
-**Intake** lists facts the playbook needs beyond what the skills' `needs` already cover. Ask only for what FOUNDER_CONTEXT.md and the user haven't given.
+**Intake** lists facts the playbook needs beyond what the skills' `needs` already cover. Ask only for what PRODUCT_CONTEXT.md, PRODUCT_KNOWLEDGE.md and the user haven't given.
+
+**Template phases** (board-meeting) are expanded into concrete steps while building the plan, once the agenda and seats are known, the same way `growth-review` adds steps at runtime.
 
 ---
 
@@ -23,6 +28,9 @@ Each playbook is a chain of skills grouped into phases. Steps in the same phase 
 | `landing-page-fix` | Raise a page's conversion rate | cro-optimization → brand-copywriter |
 | `outbound` | Start cold outreach that books calls | competitor-intel? + lead-magnet-generator? → outreach-specialist |
 | `growth-review` | Decide what to do next, then do it | strategic-planning → up to 3 skills chosen from its moves |
+| `board-meeting` | Debate a decision with the seats it needs, then decide | agenda (chair) → per item: seats' positions → debate → chair synthesis → your call |
+
+`launch`, `new-product` and `growth-review` can end with an optional **Board review** phase (see the end of this file).
 
 ---
 
@@ -62,12 +70,13 @@ Each playbook is a chain of skills grouped into phases. Steps in the same phase 
 |---|-------|-----------|------|------|
 | 01 | prd-generator | — | — | Write the PRD for <product idea>. Use the intake answers in the brief instead of asking questions. Markdown only; the orchestrator makes the PDF afterwards if the brief asks. |
 | 02 | competitor-intel | — | a competitor is named | Analyse <competitor> as the main alternative to <product idea>. |
+| 03 | cto-review | 01 | the product needs custom technology, or the user asks for a feasibility check | Review the technical feasibility, build-vs-buy choices, cost and risks of the PRD in inputs. |
 
 ### Phase 2 · Monetise & launch
 | # | skill | depends_on | when | task |
 |---|-------|-----------|------|------|
-| 03 | pricing-strategist | 01, 02 | — | Price <product> based on the PRD's personas and features, anchored on competitor pricing if available. |
-| 04 | go-to-market-plan | 01, 02, 03 | — | Create 3 GTM strategies for <product> for its first 90 days, using the PRD personas and the pricing. |
+| 04 | pricing-strategist | 01, 02, 03 | — | Price <product> based on the PRD's personas and features, anchored on competitor pricing if available, and covering the running costs in the feasibility review if available. |
+| 05 | go-to-market-plan | 01, 02, 04 | — | Create 3 GTM strategies for <product> for its first 90 days, using the PRD personas and the pricing. |
 
 ---
 
@@ -96,7 +105,7 @@ Tell the user each writer produces a fixed number of posts (X: 3, LinkedIn: 2). 
 ## landing-page-fix
 
 **Triggers:** landing page, conversion, CRO, homepage, signups dropping, page not converting
-**Intake:** page URL (or HTML) · page goal (signup, demo, purchase, waitlist) · current conversion rate if known · audience if not in FOUNDER_CONTEXT.md
+**Intake:** page URL (or HTML) · page goal (signup, demo, purchase, waitlist) · current conversion rate if known · audience if not in PRODUCT_CONTEXT.md
 
 ### Phase 1 · Audit
 | # | skill | depends_on | when | task |
@@ -140,3 +149,40 @@ Tell the user each writer produces a fixed number of posts (X: 3, LinkedIn: 2). 
 
 ### Phase 2 · Execute (chosen at the checkpoint)
 After step 01, always stop for a checkpoint, even in "run everything" mode. For each of the 3 moves, use `good_for` in the skill catalog to propose the one skill that produces its first deliverable (e.g. a "launch a newsletter" move → brand-copywriter; a "cold outreach to agencies" move → outreach-specialist). Show the proposal and let the user pick up to 3. Add the picked steps as 02, 03, 04 with `depends_on: 01` and a task naming the move. They can run in parallel.
+
+---
+
+## board-meeting
+
+**Triggers:** should we, brainstorm, board meeting, debate, pressure-test, sanity check, pitch to the board, pitch to investors, decide between, which option, what do you all think
+**Intake:** the question or decision · options already on the table · deadline for the decision · anything already ruled out · for a pitch-review: the proposal or deck (file or text)
+
+Read `board.md` before building this plan. The seats are skills speaking as their personas; the chair is you (the orchestrator).
+
+### Phase 0 · Agenda (chair, while building the plan)
+Not a step. While routing and building the plan:
+1. Draft 1 to 4 agenda items. Each item has a question to resolve and a format: `explore` (find and shortlist options), `decide` (choose between options) or `pitch-review` (stress-test a proposal before real investors or a board).
+2. Seat the item: pick 2 to 4 seats whose lens the question needs, from the Board & Management table in PRODUCT_CONTEXT.md and the `seat` and `board` columns of the skill catalog. Every seat is on demand: no seat attends by default. Give each seat a one-line reason. `invite-only` seats attend only when the user asks for them.
+3. Respect the table cap for the profile: bootstrapped 4, startup 5, corporate 6 distinct seats across the whole meeting.
+4. Expand the template below once per item and write the agenda into `brief.md`.
+
+### Phase N · Item N (template, one phase per agenda item) · `checkpoint: always`
+| # | skill | depends_on | mode | task |
+|---|-------|-----------|------|------|
+| N1a, N1b… | each seat for item N (`repeat` per seat) | — | board, round 1 | Give your position on: <item question>. Format: <format>. |
+| N2a, N2b… | each seat for item N (`repeat` per seat) | all N1x | board, round 2 | Read the round 1 positions in inputs. Respond to the seats you disagree with by name; hold, revise or add conditions. |
+| NS | (chair) | all N2x | — | Synthesise item N into `transcript.md` using the template in `board.md`. |
+
+Step ids use the item number and round, e.g. `11a` (item 1, round 1, first seat), `12a`, `1S`. Output files go to `items/<item>-r<round>-<skill>.md`; the chair's synthesis goes to `transcript.md`.
+
+### Final · Minutes
+Write `SUMMARY.md` using the board variant in `run-files.md`. Then offer **Execute the action items**: compose a custom chain (Step 3 rules) from the action items' skills, with `SUMMARY.md` as an input to every step.
+
+---
+
+## Board review (optional phase)
+
+Added as the last phase of `launch`, `new-product` and `growth-review` when the user asks for it, or when the profile is `corporate` (offer it then, don't force it).
+
+### Phase · Board review · `checkpoint: always`
+One agenda item, "Pressure-test this plan before we commit", format `decide`. Seat 2 to 4 seats from the domains the run touched, preferring seats that did **not** produce a step (e.g. `investor-review` and `cto-review` reviewing a launch). Expand it like a board-meeting item: round 1 `inputs` are the run's output files, then round 2 and the chair's synthesis. Its action items and dissent go into `SUMMARY.md`.

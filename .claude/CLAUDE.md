@@ -10,24 +10,24 @@ founder-skills/              # repo name; the plugin is called founder-suite
 │   ├── marketplace.json    # Marketplace listing (no component specs)
 │   └── plugin.json         # Plugin manifest; components are auto-discovered
 ├── agents/
-│   └── founder-step.md     # Subagent that runs one /founder step
+│   └── founder-step.md     # Runs one /founder step or one board-meeting seat
 ├── hooks/
 │   ├── hooks.json          # SessionStart hook registration
-│   └── session-start.js    # Reminds about blank FOUNDER_CONTEXT.md / unfinished runs
+│   └── session-start.js    # Reminds about blank/old context files and unfinished runs
 ├── bin/
 │   └── cli.js              # Installer (run via npx github:<owner>/founder-skills)
 ├── scripts/
 │   └── sync-shared.js      # Injects shared/ blocks into every skill
 ├── shared/                 # Single source for sections every skill carries
 │   ├── orchestrated-mode-hook.md
-│   └── skill-protocols.md  # Saving Output, Context Write-back, Orchestrated Mode
+│   └── skill-protocols.md  # Project Files, Saving Output, Context Write-back, Orchestrated + Board Mode
 ├── skills/                 # All skills
-│   ├── founder/            # Orchestrator: playbooks, skill catalog, run files
-│   ├── founder-context/    # Builds FOUNDER_CONTEXT.md from a website
+│   ├── founder/            # Orchestrator: playbooks (incl. board-meeting), skill catalog, run files
+│   ├── product-context/    # Builds PRODUCT_CONTEXT.md (profile + board) from a website or questions
 │   └── <skill-name>/
 │       ├── SKILL.md        # Skill definition
 │       └── references/     # Additional materials
-├── FOUNDER_CONTEXT.md      # Business context template
+├── PRODUCT_CONTEXT.md      # Product context template (what we do)
 ├── package.json            # npm package config
 ├── README.md               # User documentation
 └── .claude/CLAUDE.md       # This file (contributor guide)
@@ -54,6 +54,17 @@ founder-skills/              # repo name; the plugin is called founder-suite
 
    ## Purpose
    One sentence. One outcome. No context.
+
+   ## Persona
+   - **Seat:** CFO
+   - **Board:** on-demand
+   - **Profiles:**
+     - **bootstrapped:** Money mentor. Has bootstrapped two businesses on savings; thinks in months of personal runway and the cheapest test.
+     - **startup:** CFO. Has run finance from seed to Series B; thinks in burn multiple, CAC payback and the next round's milestones.
+     - **corporate:** Group CFO. Allocates capital across business units; thinks in NPV, payback period and cannibalisation.
+   - **Lens:** What does this cost and what does it return? How long until it pays back? What's the cheapest way to find out? What breaks if we're wrong?
+   - **Watches:** gross margin, CAC payback, runway, ARPU
+   - **Pushes back on:** `marketing-ideas` on spend without a payback window; `outreach-specialist` on discounts that train buyers to wait
 
    ---
 
@@ -85,7 +96,7 @@ founder-skills/              # repo name; the plugin is called founder-suite
    **DO NOT PROCEED** to Step 2 until you have read all reference files and have their content in context.
 
    ### 2. Check for Business Context
-   Check if `FOUNDER_CONTEXT.md` exists in the project root.
+   Check if `PRODUCT_CONTEXT.md` exists in the project root.
    - **If it exists:** Read it and use the business context to personalize
      your output (company name, brand voice, industry specifics, audience).
    - **If it doesn't exist:** Proceed using defaults from
@@ -183,23 +194,32 @@ founder-skills/              # repo name; the plugin is called founder-suite
    Document any assumptions made in the output.
    ```
 
+   Write the `## Persona` section by hand. Every deliverable skill is also a seat on the project's board, so the same judgment shows up whether the skill runs alone, in a playbook, or in a board meeting. Rules:
+   - **Seat** is the role it plays (CFO, CTO, Head of Sales, Content team…). **Board** is `on-demand` (the chair seats it when an agenda item needs its lens) or `invite-only` (only when the user asks, e.g. content writers).
+   - One line per profile (`bootstrapped`, `startup`, `corporate`): title, then experience and how that seat frames money and risk at that scale.
+   - **Lens** is 4 to 6 questions the seat always asks; **Watches** are its KPIs; **Pushes back on** names other skills it naturally disagrees with, and about what.
+   - The persona shapes judgment only. It never changes the Output Format.
+   - `node scripts/sync-shared.js --check` fails if a field is missing.
+
    Don't add a `version:` field. Versions were removed from skills so they work on Claude.ai; the pack's version lives in `package.json` and `.claude-plugin/`.
 
-   Don't write the Saving Output, Context Write-back or Orchestrated Mode sections yourself. The sync script adds them in step 3.
+   Don't write the Project Files, Saving Output, Context Write-back, Orchestrated Mode or Board Mode sections yourself. The sync script adds them in step 3.
 
 3. Run the sync script:
    ```bash
    node scripts/sync-shared.js
    ```
-   It inserts two marked blocks into every skill (except `founder` and `founder-context`):
-   - a short "If this is an orchestrated run" branch right after `**Check $ARGUMENTS first to determine execution mode:**` (keep that exact line in every skill; the script anchors on it)
-   - the Saving Output, Context Write-back and Orchestrated Mode sections at the end of the file
+   It inserts two marked blocks into every skill (except `founder` and `product-context`):
+   - right after `**Check $ARGUMENTS first to determine execution mode:**` (keep that exact line in every skill; the script anchors on it): a short "In every mode" note to load the Project Files, and an "If this is an orchestrated run" branch
+   - at the end of the file: the Project Files, Saving Output, Context Write-back and Orchestrated Mode sections (including Board Mode)
 
-   Never edit text between `<!-- founder-skills:... -->` markers by hand. Change `shared/` and re-run the script. `node scripts/sync-shared.js --check` exits 1 if anything is out of date.
+   It also checks every skill's `## Persona` section.
 
-4. Register the skill with the orchestrator: add a row to `skills/founder/references/skill-catalog.md` (needs, produces, good_for, notes) and, if it belongs in a workflow, a step in `skills/founder/references/playbooks.md`.
+   Never edit text between `<!-- founder-skills:... -->` markers by hand. Change `shared/` and re-run the script. `node scripts/sync-shared.js --check` exits 1 if anything is out of date or a Persona field is missing.
 
-5. Update `README.md` to list the new skill in the Available Skills table, and update the skill count at the top.
+4. Register the skill with the orchestrator: add a row to `skills/founder/references/skill-catalog.md` (seat, board, needs, produces, good_for, notes) and, if it belongs in a workflow, a step in `skills/founder/references/playbooks.md`. Existing projects pick the new seat up the next time `/product-context` runs; until then the skill uses its Persona's profile line.
+
+5. Update `README.md` to list the new skill (with its seat) in the Available Skills table, and update the skill count at the top and in the descriptions in `package.json` and `.claude-plugin/`.
 
 ## Skill Naming Conventions
 
@@ -241,44 +261,54 @@ Bump `version` in `package.json`, `.claude-plugin/plugin.json` and both places i
 
 PDF conversion uses a pinned `npx --yes md-to-pdf@5.2.5` in `skills/prd-generator/SKILL.md` and `skills/founder/SKILL.md`. Change both together, and only to a release that has been out for a few weeks. `--yes` stops npx from waiting for an install prompt, and `< /dev/null` stops md-to-pdf from waiting for Markdown on stdin. Both would otherwise hang a Claude session.
 
-The SessionStart hook must stay silent in projects without `FOUNDER_CONTEXT.md` or `founder_outputs/runs/`, must never exit non-zero, and must stay dependency-free.
+The SessionStart hook must stay silent in projects without `PRODUCT_CONTEXT.md`, `FOUNDER_CONTEXT.md` or `founder_outputs/runs/`, must never exit non-zero, and must stay dependency-free.
 
 ## Shared Conventions
 
 Every deliverable skill follows the same contract (defined in `shared/skill-protocols.md`):
 
-- **Outputs** are saved to `./founder_outputs/<skill>/YYYY-MM-DD-<slug>.md` with a YAML front matter header (`skill`, `created`, `run`, `status`, `request`, `inputs`, `assumptions`, `context_updates`). `prd-generator` overrides the path to keep its project folder.
-- **Context write-back:** durable facts the user states are recorded in `context_updates`. Standalone runs offer to apply them to `FOUNDER_CONTEXT.md`; orchestrated runs leave that to `/founder`.
-- **Orchestrated mode** is triggered by a `FOUNDER_RUN` handoff block. The skill asks no questions, reads `brief` and `inputs`, writes to `output`, and reports `status: blocked` with questions if it can't continue.
+- **Project files.** Every skill reads two root files before working, in every mode.
+  - `PRODUCT_CONTEXT.md` is *what we do*: company, product idea, scale profile (`bootstrapped | startup | corporate`) and the Board & Management table. It is user-owned; changes go through write-back.
+  - `PRODUCT_KNOWLEDGE.md` is *how we do it*: decisions with `D-NNN` IDs, roles and owned actions, dependencies, discussions, superseded decisions. It is machine-maintained.
+  - The skill acts as its Board row (or its Persona's line for the profile), and stays consistent with active decisions or revises them explicitly.
+  - Standalone runs ask the profile once if it's unset and save it.
+- **Outputs** are saved to `./founder_outputs/<skill>/YYYY-MM-DD-<slug>.md` with a YAML front matter header (`skill`, `created`, `run`, `status`, `profile`, `request`, `inputs`, `assumptions`, `key_decisions`, `context_updates`). `prd-generator` overrides the path to keep its project folder.
+- **Knowledge log.** Standalone runs append their `key_decisions` to `PRODUCT_KNOWLEDGE.md` themselves. In orchestrated and board runs, steps never write it; `/founder` merges once per phase, so parallel steps don't race.
+- **Context write-back:** durable facts the user states are recorded in `context_updates`. Standalone runs offer to apply them to `PRODUCT_CONTEXT.md`; orchestrated runs leave that to `/founder`.
+- **Orchestrated mode** is triggered by a `FOUNDER_RUN` handoff block, which always carries `profile`. The skill asks no questions, reads `brief` and `inputs`, writes to `output`, and reports `status: blocked` with questions if it can't continue.
+- **Board mode** is a `FOUNDER_RUN` with `mode: board`. The skill speaks as its persona and writes a short position memo (round 1 blind, later rounds respond to peers) instead of its deliverable.
 
 When writing a skill's steps, keep questions in a clearly labelled step (e.g. "Ask Clarifying Questions") and keep a concrete Defaults & Assumptions section. Orchestrated mode relies on both.
 
 ## Orchestrator
 
 `/founder` lives in `skills/founder/`:
-- `SKILL.md` — routing, consolidated intake, run folder, execution (parallel subagents or sequential), checkpoints, summary, write-back, resume
-- `references/playbooks.md` — playbook definitions; edit this to add or change workflows
-- `references/skill-catalog.md` — each skill's needs, produces, good_for
-- `references/run-files.md` — templates for `brief.md`, `plan.md`, `SUMMARY.md`
+- `SKILL.md` — routing, the product-context gate, consolidated intake, run folder, execution (parallel subagents, named agents reused across board rounds, or sequential), `(chair)` steps, knowledge merge, checkpoints, summary, write-back, resume
+- `references/playbooks.md` — playbook definitions, including `board-meeting` (template phases expanded at plan time) and the optional Board review phase; edit this to add or change workflows
+- `references/board.md` — how the chair seats a meeting, runs rounds, synthesises, checkpoints and merges into `PRODUCT_KNOWLEDGE.md`
+- `references/skill-catalog.md` — each skill's seat, board, needs, produces, good_for
+- `references/run-files.md` — templates for `brief.md`, `plan.md`, `transcript.md`, `SUMMARY.md` (including the board minutes)
+
+Board meetings use Claude Code agent teams when the user has them enabled (`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`, interactive sessions, Claude Code 2.1.288+ for plugin-defined teammates). Seats are launched with the Agent tool and `name: <skill>`, which makes them teammates when teams are on and named subagents otherwise. Never make the meeting depend on teams: the run folder (`items/`, `transcript.md`) is the shared context, and resume relaunches seats from it.
 
 It finds the other skills as siblings of its own folder (`<base dir>/../<skill>/SKILL.md`), which holds for `~/.claude/skills/`, project `.claude/skills/` and plugin installs.
 
-`skills/founder-context/references/founder_context_template.md` is a copy of the root `FOUNDER_CONTEXT.md`, kept in sync by the sync script.
+`skills/product-context/references/product_context_template.md` is a copy of the root `PRODUCT_CONTEXT.md`, kept in sync by the sync script. `PRODUCT_CONTEXT.md` was called `FOUNDER_CONTEXT.md` before v3 (and `product-context` was `founder-context`). Skills, the hook and the CLI still recognise the old file and point users to `/product-context migrate`.
 
 ## Code Style
 
 - Keep SKILL.md files focused and actionable
 - Use clear, imperative instructions for Claude
 - Include example outputs where helpful
-- Reference FOUNDER_CONTEXT.md for business-specific context
+- Reference PRODUCT_CONTEXT.md for business-specific context
 
 ## CLI Development
 
 The CLI (`bin/cli.js`) handles:
-- `install` - Copies skills to `~/.claude/skills/` + FOUNDER_CONTEXT.md to project root
+- `install` - Copies skills to `~/.claude/skills/` + PRODUCT_CONTEXT.md to project root (leaves an existing FOUNDER_CONTEXT.md alone and suggests migrating)
 - `list` - Shows available skills
 - `--skill` flag - Selective installation (warns if `founder` is installed without the skills it runs)
-- `--no-context` flag - Skip FOUNDER_CONTEXT.md creation
+- `--no-context` flag - Skip PRODUCT_CONTEXT.md creation
 - `--force` flag - Overwrite installed skills. Without it, the CLI asks in a terminal and skips existing skills otherwise
 
 The npm name `founder-skills` belongs to an unrelated package, so the CLI is run with `npx github:<owner>/founder-skills`. The help text derives that command from `repository.url` in `package.json`.
