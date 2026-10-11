@@ -1,11 +1,24 @@
 {
-  "name": "founder-skills",
-  "version": "1.0.0",
-  "description": "20+ proven marketing, copywriting, and product skills for founders, marketers, and business owners",
+  "name": "founder-suite",
+  "version": "3.0.0",
+  "description": "A complete founder toolkit for Claude: 20 marketing, product, finance and strategy skills that act as your board (CEO, CFO, CTO, CMO, Head of Sales...), plus a /founder orchestrator that chains them into playbooks and chairs board meetings",
   "author": {
-    "name": "Ognjen Gatalo"
+    "name": "Parvez Ali",
+    "url": "https://github.com/Awesomer9561"
   },
-  "repository": "https://github.com/ognjengt/founder-skills",
+  "homepage": "https://github.com/Awesomer9561/founder-skills#readme",
+  "repository": "https://github.com/Awesomer9561/founder-skills",
   "license": "MIT",
-  "keywords": ["founder", "marketing", "copywriting", "outreach", "linkedin", "sop", "strategy"]
+  "keywords": [
+    "founder",
+    "marketing",
+    "copywriting",
+    "outreach",
+    "linkedin",
+    "sop",
+    "strategy",
+    "orchestrator",
+    "go-to-market",
+    "product-hunt"
+  ]
 }

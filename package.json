@@ -1,13 +1,13 @@
 {
-  "name": "founder-skills",
-  "version": "1.0.0",
-  "description": "Claude Code skills for founders — SOPs, CRO, content creation, outreach, and strategic planning",
+  "name": "founder-suite",
+  "version": "3.0.0",
+  "description": "A complete founder toolkit for Claude: 20 marketing, product, finance and strategy skills that act as your board (CEO, CFO, CTO, CMO, Head of Sales...), plus a /founder orchestrator that chains them into playbooks and chairs board meetings",
   "bin": {
-    "founder-skills": "./bin/cli.js"
+    "founder-suite": "./bin/cli.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ognjengt/founder-skills"
+    "url": "git+https://github.com/Awesomer9561/founder-skills.git"
   },
   "keywords": [
     "claude",
@@ -17,12 +17,14 @@
     "sop",
     "cro",
     "marketing",
-    "ai"
+    "ai",
+    "orchestrator",
+    "plugin"
   ],
-  "author": "Ognjen Gatalo",
+  "author": "Parvez Ali",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ognjengt/founder-skills/issues"
+    "url": "https://github.com/Awesomer9561/founder-skills/issues"
   },
-  "homepage": "https://github.com/ognjengt/founder-skills#readme"
+  "homepage": "https://github.com/Awesomer9561/founder-skills#readme"
 }

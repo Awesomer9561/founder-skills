@@ -1,42 +1,37 @@
 {
-  "name": "founder-skills",
+  "name": "founder-suite",
   "owner": {
-    "name": "Ognjen Gatalo",
-    "url": "https://github.com/ognjengt"
+    "name": "Parvez Ali",
+    "url": "https://github.com/Awesomer9561"
   },
   "metadata": {
-    "description": "Claude Code skills for founders — SOPs, CRO, content creation, outreach, and strategic planning",
-    "version": "1.0.0"
+    "description": "A complete founder toolkit for Claude: 20 marketing, product, finance and strategy skills that act as your board (CEO, CFO, CTO, CMO, Head of Sales...), plus a /founder orchestrator that chains them into playbooks and chairs board meetings",
+    "version": "3.0.0"
   },
   "plugins": [
     {
-      "name": "founder-skills",
-      "description": "Essential skills for founders: SOPs, conversion optimization, viral hooks, lead magnets, social media writing, outreach, and strategic planning",
+      "name": "founder-suite",
+      "description": "A complete founder toolkit for Claude: 20 marketing, product, finance and strategy skills that act as your board (CEO, CFO, CTO, CMO, Head of Sales...), plus a /founder orchestrator that chains them into playbooks and chairs board meetings",
       "source": "./",
-      "strict": false,
-      "version": "1.0.0",
+      "version": "3.0.0",
       "author": {
-        "name": "Ognjen Gatalo"
+        "name": "Parvez Ali",
+        "url": "https://github.com/Awesomer9561"
       },
-      "repository": "https://github.com/ognjengt/founder-skills",
+      "homepage": "https://github.com/Awesomer9561/founder-skills#readme",
+      "repository": "https://github.com/Awesomer9561/founder-skills",
       "license": "MIT",
-      "keywords": ["founder", "marketing", "copywriting", "outreach", "linkedin", "sop", "strategy"],
-      "skills": [
-        "./skills/sop-creator",
-        "./skills/cro-optimization",
-        "./skills/viral-hook-creator",
-        "./skills/lead-magnet-generator",
-        "./skills/strategic-planning",
-        "./skills/go-to-market-plan",
-        "./skills/x-writer",
-        "./skills/linkedin-writer",
-        "./skills/outreach-specialist",
-        "./skills/competitor-intel",
-        "./skills/brand-copywriter",
-        "./skills/pricing-strategist",
-        "./skills/prd-generator",
-        "./skills/product-hunt-launch-plan",
-        "./skills/marketing-ideas"
+      "keywords": [
+        "founder",
+        "marketing",
+        "copywriting",
+        "outreach",
+        "linkedin",
+        "sop",
+        "strategy",
+        "orchestrator",
+        "go-to-market",
+        "product-hunt"
       ]
     }
   ]

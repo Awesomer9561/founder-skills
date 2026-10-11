@@ -31,4 +31,9 @@ Thumbs.db
 .agents/
 .codex/
 .opencode/
-.claude/
+# (.claude/CLAUDE.md is the contributor guide and is tracked)
+.claude/*
+!.claude/CLAUDE.md
+
+# Skill outputs when testing in this repo
+founder_outputs/
