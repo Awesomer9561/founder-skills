@@ -32,3 +32,6 @@ Thumbs.db
 .codex/
 .opencode/
 .claude/
+
+# Skill outputs when testing in this repo
+founder_outputs/

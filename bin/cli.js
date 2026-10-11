@@ -3,11 +3,27 @@
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
+const readline = require('readline');
 
 const SKILLS_DIR = path.join(__dirname, '..', 'skills');
 const FOUNDER_CONTEXT = path.join(__dirname, '..', 'FOUNDER_CONTEXT.md');
 const TARGET_DIR = path.join(os.homedir(), '.claude', 'skills');
 const TARGET_CONTEXT = path.join(process.cwd(), 'FOUNDER_CONTEXT.md'); // Project root
+
+// The npm name "founder-skills" belongs to an unrelated package, so always run from GitHub
+const RUN_COMMAND = (() => {
+  try {
+    const pkg = require('../package.json');
+    const url = typeof pkg.repository === 'string' ? pkg.repository : pkg.repository.url;
+    const match = url.match(/github\.com[/:]([^/]+\/[^/.]+)/);
+    return match ? `npx github:${match[1]}` : 'node bin/cli.js';
+  } catch (err) {
+    return 'node bin/cli.js';
+  }
+})();
+
+// The orchestrator skill, which runs the other skills
+const ORCHESTRATOR = 'founder';
 
 // Available skills
 function getAvailableSkills() {
@@ -44,7 +60,8 @@ function parseArgs(args) {
   const result = {
     command: null,
     skills: [],
-    noContext: false
+    noContext: false,
+    force: false
   };
 
   let i = 0;
@@ -60,6 +77,8 @@ function parseArgs(args) {
       }
     } else if (arg === '--no-context') {
       result.noContext = true;
+    } else if (arg === '--force' || arg === '-f') {
+      result.force = true;
     } else if (!arg.startsWith('-')) {
       if (!result.command) {
         result.command = arg;
@@ -94,12 +113,37 @@ function listSkills() {
     console.log(`    ${description}\n`);
   });
 
-  console.log('Install all:     npx founder-skills install');
-  console.log('Install one:     npx founder-skills install --skill sop-creator\n');
+  console.log(`Install all:     ${RUN_COMMAND} install`);
+  console.log(`Install one:     ${RUN_COMMAND} install --skill sop-creator\n`);
+}
+
+// Ask a yes/no question; defaults to no
+function confirm(question) {
+  const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+  return new Promise(resolve => {
+    rl.question(`${question} [y/N] `, answer => {
+      rl.close();
+      resolve(/^y(es)?$/i.test(answer.trim()));
+    });
+  });
+}
+
+// Decide which already-installed skills may be overwritten
+async function resolveOverwrites(skills, force) {
+  const existing = skills.filter(skill => fs.existsSync(path.join(TARGET_DIR, skill)));
+  if (existing.length === 0 || force) return skills;
+
+  console.log(`\n⚠️  Already installed in ~/.claude/skills/: ${existing.join(', ')}`);
+  console.log('   Overwriting replaces any local edits to those skills.');
+
+  if (process.stdin.isTTY && await confirm('   Overwrite them?')) return skills;
+
+  if (!process.stdin.isTTY) console.log('   Skipping them (use --force to overwrite).');
+  return skills.filter(skill => !existing.includes(skill));
 }
 
 // Install skills
-function installSkills(selectedSkills, noContext = false) {
+async function installSkills(selectedSkills, noContext = false, force = false) {
   const availableSkills = getAvailableSkills();
 
   // If no specific skills selected, install all
@@ -122,6 +166,19 @@ function installSkills(selectedSkills, noContext = false) {
     return;
   }
 
+  if (selectedSkills.includes(ORCHESTRATOR) && skillsToInstall.length < availableSkills.length) {
+    const missing = availableSkills.filter(s =>
+      s !== ORCHESTRATOR && !skillsToInstall.includes(s) && !fs.existsSync(path.join(TARGET_DIR, s))
+    );
+    if (missing.length > 0) {
+      console.log(`\nℹ️  /${ORCHESTRATOR} runs the other skills. Playbook steps for these will be skipped until installed:`);
+      console.log(`   ${missing.join(', ')}`);
+    }
+  }
+
+  const toCopy = await resolveOverwrites(skillsToInstall, force);
+  const skipped = skillsToInstall.filter(skill => !toCopy.includes(skill));
+
   console.log('\n🚀 Installing founder-skills...\n');
 
   // Ensure target directory exists
@@ -129,11 +186,14 @@ function installSkills(selectedSkills, noContext = false) {
 
   // Copy each skill
   console.log('Skills (global ~/.claude/skills/):');
-  skillsToInstall.forEach(skill => {
+  skipped.forEach(skill => console.log(`  ⏭️  ${skill} (already installed, kept)`));
+  toCopy.forEach(skill => {
     const src = path.join(SKILLS_DIR, skill);
     const dest = path.join(TARGET_DIR, skill);
 
     try {
+      // Replace rather than merge, so files removed upstream don't linger in references/
+      fs.rmSync(dest, { recursive: true, force: true });
       copyDir(src, dest);
       console.log(`  ✅ ${skill}`);
     } catch (err) {
@@ -148,7 +208,7 @@ function installSkills(selectedSkills, noContext = false) {
       try {
         fs.copyFileSync(FOUNDER_CONTEXT, TARGET_CONTEXT);
         console.log(`  ✅ Created ./FOUNDER_CONTEXT.md`);
-        console.log(`     Edit this file to customize skills for your business.`);
+        console.log(`     Run /founder-context to fill it in, or edit it by hand.`);
       } catch (err) {
         console.log(`  ⚠️  Could not copy FOUNDER_CONTEXT.md - ${err.message}`);
       }
@@ -159,7 +219,7 @@ function installSkills(selectedSkills, noContext = false) {
 
   console.log('\n✨ Installation complete!\n');
   console.log('Usage in Claude Code:');
-  skillsToInstall.forEach(skill => {
+  toCopy.forEach(skill => {
     console.log(`  /${skill}`);
   });
   console.log('');
@@ -171,7 +231,7 @@ function showHelp() {
 founder-skills - Claude Code skills for founders
 
 Usage:
-  npx founder-skills <command> [options]
+  ${RUN_COMMAND} <command> [options]
 
 Commands:
   install              Install skills + FOUNDER_CONTEXT.md template
@@ -181,27 +241,30 @@ Options:
   --skill, -s <name>   Install specific skill(s)
                        Can be used multiple times
   --no-context         Skip creating FOUNDER_CONTEXT.md
+  --force, -f          Overwrite skills that are already installed
 
 Examples:
-  npx founder-skills install
-  npx founder-skills install --skill sop-creator
-  npx founder-skills install -s sop-creator -s linkedin-writer
-  npx founder-skills install --no-context
-  npx founder-skills list
+  ${RUN_COMMAND} install
+  ${RUN_COMMAND} install --skill sop-creator
+  ${RUN_COMMAND} install -s sop-creator -s linkedin-writer
+  ${RUN_COMMAND} install --no-context
+  ${RUN_COMMAND} install --force
+  ${RUN_COMMAND} list
 
 Skills are installed globally to ~/.claude/skills/
 FOUNDER_CONTEXT.md is created in your current directory (project root)
+Run /founder-context in Claude Code to fill it in from your website
 `);
 }
 
 // Main
-function main() {
+async function main() {
   const args = process.argv.slice(2);
-  const { command, skills, noContext } = parseArgs(args);
+  const { command, skills, noContext, force } = parseArgs(args);
 
   switch (command) {
     case 'install':
-      installSkills(skills, noContext);
+      await installSkills(skills, noContext, force);
       break;
     case 'list':
       listSkills();
@@ -221,4 +284,7 @@ function main() {
   }
 }
 
-main();
+main().catch(err => {
+  console.error(`\n❌ ${err.message}\n`);
+  process.exit(1);
+});
