@@ -5,6 +5,19 @@
   "bin": {
     "founder-suite": "./bin/cli.js"
   },
+  "files": [
+    ".claude-plugin",
+    "agents",
+    "bin",
+    "hooks",
+    "scripts",
+    "shared",
+    "skills",
+    "PRODUCT_CONTEXT.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Awesomer9561/founder-skills.git"
