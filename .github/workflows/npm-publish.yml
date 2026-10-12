@@ -1,33 +1,30 @@
-# This workflow will run tests using node and then publish a package to GitHub Packages when a release is created
-# For more information see: https://docs.github.com/en/actions/publishing-packages/publishing-nodejs-packages
+# Publishes founder-suite to npm when a GitHub release is created.
+# Requires an NPM_TOKEN repository secret (npm automation/granular token with publish rights).
 
-name: Node.js Package
+name: Publish to npm
 
 on:
   release:
     types: [created]
 
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - run: npm ci
-      - run: npm test
-
-  publish-npm:
-    needs: build
-    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # npm provenance
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           registry-url: https://registry.npmjs.org/
-      - run: npm ci
-      - run: npm publish
+      - name: Check skills are in sync with shared/
+        run: node scripts/sync-shared.js --check
+      - name: Check release tag matches package version
+        run: |
+          [ "${GITHUB_REF_NAME#v}" = "$(node -p "require('./package.json').version")" ] \
+            || { echo "Tag $GITHUB_REF_NAME does not match package.json version"; exit 1; }
+      - run: npm publish --provenance
         env:
-          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
